@@ -1,0 +1,223 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/>
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <title>প্রো মাইনিং ও আর্ন</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #0f3460; color: #fff; text-align: center; margin: 0; padding: 0; }
+        #login-screen, #app-screen { padding: 20px; margin-top: 40px; }
+        .card { background: #1a1a2e; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 400px; margin: 0 auto; border: 1px solid #00fff0; }
+        input { padding: 12px; width: 80%; border-radius: 8px; border: 1px solid #533483; margin-bottom: 20px; background: #16213e; color: white; text-align: center; }
+        button { padding: 12px 25px; border-radius: 8px; border: none; background: linear-gradient(90deg, #e94560, #00fff0); color: #0f3460; font-weight: bold; cursor: pointer; font-size: 1rem; transition: 0.3s; }
+        button:hover { transform: scale(1.05); filter: brightness(1.2); }
+        .hidden { display: none !important; }
+        
+        /* 24-Hour Analog Clock Animation */
+        .clock-container { position: relative; width: 190px; height: 190px; margin: 20px auto; border-radius: 50%; background: radial-gradient(circle, #ffe135, #ff9900); display: flex; align-items: center; justify-content: center; box-shadow: 0 0 30px #00fff0; border: 4px solid #fff; }
+        .hour-marks { position: absolute; width: 100%; height: 100%; border-radius: 50%; }
+        .mark { position: absolute; width: 4px; height: 12px; background: #0f3460; left: 50%; transform-origin: center 95px; }
+        .mark:nth-child(1) { transform: rotate(0deg); }
+        .mark:nth-child(2) { transform: rotate(15deg); }
+        .mark:nth-child(3) { transform: rotate(30deg); }
+        .mark:nth-child(4) { transform: rotate(45deg); }
+        .mark:nth-child(5) { transform: rotate(60deg); }
+        .mark:nth-child(6) { transform: rotate(75deg); }
+        .mark:nth-child(7) { transform: rotate(90deg); }
+        .mark:nth-child(8) { transform: rotate(105deg); }
+        .mark:nth-child(9) { transform: rotate(120deg); }
+        .mark:nth-child(10) { transform: rotate(135deg); }
+        .mark:nth-child(11) { transform: rotate(150deg); }
+        .mark:nth-child(12) { transform: rotate(165deg); }
+        .mark:nth-child(13) { transform: rotate(180deg); }
+        .mark:nth-child(14) { transform: rotate(195deg); }
+        .mark:nth-child(15) { transform: rotate(210deg); }
+        .mark:nth-child(16) { transform: rotate(225deg); }
+        .mark:nth-child(17) { transform: rotate(240deg); }
+        .mark:nth-child(18) { transform: rotate(255deg); }
+        .mark:nth-child(19) { transform: rotate(270deg); }
+        .mark:nth-child(20) { transform: rotate(285deg); }
+        .mark:nth-child(21) { transform: rotate(300deg); }
+        .mark:nth-child(22) { transform: rotate(315deg); }
+        .mark:nth-child(23) { transform: rotate(330deg); }
+        .mark:nth-child(24) { transform: rotate(345deg); }
+
+        .hand { position: absolute; bottom: 50%; width: 6px; height: 35%; background: #0f3460; transform-origin: bottom center; border-radius: 3px; animation: 24hr-tick 86400s linear infinite; }
+        @keyframes 24hr-tick { 100% { transform: rotate(360deg); } }
+        .clock-center { position: absolute; width: 24px; height: 24px; background: #0f3460; border-radius: 50%; z-index: 10; border: 2px solid #fff; }
+        .mining-text { position: absolute; bottom: 15px; font-weight: bold; color: #0f3460; background: rgba(255,255,255,0.9); padding: 4px 12px; border-radius: 15px; font-size: 0.9rem; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .stat-box { background: #16213e; padding: 15px; border-radius: 10px; border: 1px solid #4e4e6a; }
+        .stat-value { font-size: 1.3rem; color: #00fff0; font-weight: bold; }
+        .ad-btn-group { display: flex; flex-direction: column; gap: 10px; }
+        .ad-btn { background: #00fff0; color: #16213e; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; text-decoration: none; display: block; border: none; transition: 0.2s; }
+        .ad-btn:disabled { background: #533483; color: #8f8f9d; cursor: not-allowed; }
+        .invite-section { margin-top: 30px; background: #16213e; padding: 15px; border-radius: 10px; border-style: dashed; border-color: #00fff0; }
+        #invite-link { color: #ffe135; font-weight: bold; word-break: break-all; }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="card">
+            <h2>অ্যাকাউন্ট তৈরি</h2>
+            <p>আপনার জিমেইল ও পাসওয়ার্ড দিন</p>
+            <input type="email" id="email" placeholder="example@gmail.com" required><br>
+            <input type="password" id="password" placeholder="পাসওয়ার্ড লিখুন" required><br>
+            <button onclick="startApp()">শুরু করুন</button>
+        </div>
+    </div>
+
+    <div id="app-screen" class="hidden">
+        <div class="card" style="max-width: 600px;">
+            <h2>ড্যাশবোর্ড</h2>
+            <p>স্বাগতম, <span id="user-email" style="color: #00fff0; font-weight: bold;"></span></p>
+            
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div>আপনার ব্যালেন্স</div>
+                    <div class="stat-value"><span id="balance">0</span> টাকা</div>
+                </div>
+                <div class="stat-box">
+                    <div>ডেইলি মাইনিং</div>
+                    <div class="stat-value">৩০০ টাকা</div>
+                </div>
+            </div>
+
+            <div class="clock-container">
+                <div class="hour-marks">
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                    <div class="mark"></div><div class="mark"></div><div class="mark"></div><div class="mark"></div>
+                </div>
+                <div class="hand"></div>
+                <div class="clock-center"></div>
+                <div class="mining-text">মাইনিং স্বয়ংক্রিয়</div>
+            </div>
+
+            <hr style="border: 0; border-top: 1px solid #4e4e6a; margin: 20px 0;">
+
+            <h3>ডেইলি টাস্ক (বিজ্ঞাপন দেখুন)</h3>
+            <div class="ad-btn-group">
+                <button class="ad-btn" id="ad1" onclick="watchAd(1)">বিজ্ঞাপন ১ দেখুন (১০০ টাকা)</button>
+                <button class="ad-btn" id="ad2" onclick="watchAd(2)" disabled>বিজ্ঞাপন ২ দেখুন (১০০ টাকা)</button>
+                <button class="ad-btn" id="ad3" onclick="watchAd(3)" disabled>বিজ্ঞাপন ৩ দেখুন (১০০ টাকা)</button>
+            </div>
+
+            <div class="invite-section">
+                <p>বন্ধুদের ইনভাইট করে আয় করুন:</p>
+                <div id="invite-link">https://myearnsite.github.io?ref=user</div>
+                <button onclick="copyInvite()" style="padding: 5px 10px; font-size: 0.8rem; margin-top: 10px;">লিঙ্ক কপি করুন</button>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <button id="withdraw-btn" style="background: #340059; color: white; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; border: none; cursor: pointer;" onclick="withdrawFunds()">উইথড্র অনুরোধ করুন</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let balance = 0;
+        let adsWatched = 0;
+        let currentUser = '';
+
+        function loadUserData(email) {
+            const data = localStorage.getItem('user_' + email);
+            if (data) {
+                const parsed = JSON.parse(data);
+                balance = parsed.balance;
+                adsWatched = parsed.adsWatched;
+                updateButtonsState();
+            } else {
+                balance = 0;
+                adsWatched = 0;
+            }
+            document.getElementById('balance').innerText = balance;
+        }
+
+        function saveUserData() {
+            if (currentUser) {
+                const data = { balance: balance, adsWatched: adsWatched };
+                localStorage.setItem('user_' + currentUser, JSON.stringify(data));
+            }
+        }
+
+        function updateButtonsState() {
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById('ad' + i);
+                if (i <= adsWatched) {
+                    btn.innerText = '✓ দেখা হয়েছে';
+                    btn.style.background = '#4e4e6a';
+                    btn.disabled = true;
+                } else if (i === adsWatched + 1) {
+                    btn.innerText = 'বিজ্ঞাপন ' + i + ' দেখুন (১০০ টাকা)';
+                    btn.style.background = '#00fff0';
+                    btn.disabled = false;
+                } else {
+                    btn.innerText = 'বিজ্ঞাপন ' + i + ' দেখুন (১০০ টাকা)';
+                    btn.style.background = '#00fff0';
+                    btn.disabled = true;
+                }
+            }
+        }
+
+        function startApp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            if (email && email.includes('@') && password) {
+                currentUser = email;
+                document.getElementById('user-email').innerText = email;
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('app-screen').classList.remove('hidden');
+                
+                document.getElementById('invite-link').innerText = "https://myearnsite.github.io?ref=" + email.split('@')[0];
+                
+                loadUserData(email);
+            } else {
+                alert('দয়া করে সঠিক জিমেইল এবং পাসওয়ার্ড দিন।');
+            }
+        }
+
+        function watchAd(adNumber) {
+            
+            window.open('https://www.profitableratecpmnetwork.com/yt22j0gudb?key=a75fedec2e8bdee3708055db5936841c', '_blank');
+
+            balance += 100;
+            adsWatched++;
+            document.getElementById('balance').innerText = balance;
+            
+            updateButtonsState();
+            saveUserData();
+
+            if (adNumber === 3) {
+                alert('অভিনন্দন! আপনি আজকের সবকটি বিজ্ঞাপন দেখেছেন।');
+            }
+        }
+
+        function copyInvite() {
+            const text = document.getElementById('invite-link').innerText;
+            navigator.clipboard.writeText(text);
+            alert('রেফারেল লিঙ্ক কপি করা হয়েছে!');
+        }
+
+        function withdrawFunds() {
+            const bkashNumber = prompt("উইথড্র করার জন্য আপনার বিকাশ পার্সোনাল নাম্বারটি দিন:");
+            if (bkashNumber) {
+                alert('ধন্যবাদ! ' + bkashNumber + ' নাম্বারে উইথড্র অনুরোধ জমা হয়েছে।');
+                balance = 0;
+                adsWatched = 0;
+                document.getElementById('balance').innerText = balance;
+                updateButtonsState();
+                saveUserData();
+            } else {
+                alert('উইথড্র সফল করতে বিকাশ নাম্বার দেওয়া আবশ্যক।');
+            }
+        }
+    </script>
+</body>
+</html>
+
